@@ -1,0 +1,85 @@
+clc;
+clear all;
+close all;
+N = 64;
+n = 0:1:N;
+f = 1000;
+fs = 12000;
+x1 = 10*sin(2*pi*(f/fs)*n);
+N = 64;
+n = 0:1:N;
+f = 4000;
+x2 = 10*sin(2*pi*(f/fs)*n);
+xs = x1+x2;
+subplot(2,2,1);
+stem(xs);
+title('complet signal');
+fpb= 1000;
+fsb=2200;
+rp=0.2;
+rs=45;
+num = 20*log10(sqrt(rp*rs)-1);
+dem= 14.6*(fsb-fpb)/fs;
+n = ceil(num/dem);
+n = abs(n);
+wpb=2*fpb/fs;
+wsb=@*fsb/fs;
+wn = (wsb+wpb)/2;
+if(rem(n,2))==0
+m=n+1;
+else
+m=n;
+n=n-1;
+end
+w = hamming(m);
+hn = fir1(n,wn,w);
+a = abs(hn);
+subplot(2,2,2);
+stem(a);
+title('FIR filter');
+olpf=conv(xs,hn);
+dolpf=downsample(olpf,2);
+subplot(2,2,3);
+stem(dolpf);
+title('Decimation');
+xint = unsample(xs,2);
+uolpf=conv(xint,hn);
+subplot(2,2,4);
+stem(uolpf);
+title('Interpolation')
+
+
+Fir
+
+fsb=2000;
+fpb = 3200;
+fs = 10000;
+rp = 0.2;
+rs=6000;
+nr = -20*log10*(sqrt(rs*rp))-13;
+dr = 14.6*(fsb-fpb)/fs));
+N = nr/dr;
+N = ceil(N);
+if(rem(N,2))==0;
+M = N+1;
+else
+M=N;
+N = N-1;
+end
+w = kaiser(M);
+wsb = (2*fsb/fs);
+wpb = (2*wpb/fs);
+wn1 - (wsp+wpb)/2;
+%lowpass filter
+b1= fir1(N,wn1,w);
+figure(1);
+a = freqz(b1,1,500,fs);
+subplot(2,2,1);
+plot(abs(a));
+title('Lowpass Filter');
+
+
+wn2 = [wsb wpb];
+
+
+
